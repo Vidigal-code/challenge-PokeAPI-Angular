@@ -1,0 +1,7 @@
+{
+  "name": "poke-api-angular",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
