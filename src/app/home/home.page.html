@@ -1,73 +1,133 @@
-<div class="max-w-4xl mx-auto p-4 h-screen flex flex-col">
-  <h1 class="text-3xl font-bold text-center mb-6 flex-shrink-0">Pokédex</h1>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+  <div class="container mx-auto px-4 py-8">
 
-  <div class="flex justify-between mb-4 flex-shrink-0">
-    <button
-      (click)="prevPage()"
-      [disabled]="offset === 0"
-      class="px-4 py-2">
-      Anterior
-    </button>
-    <button
-      (click)="nextPage()"
-      [disabled]="offset + limit >= total"
-      class="px-4 py-2">
-      Próximo
-    </button>
-  </div>
+    <div class="text-center mb-4">
+      <h1 class="text-4xl font-bold text-gray-800 mb-2">Pokédex</h1>
+      <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 mx-auto rounded-full"></div>
+      <p class="text-gray-600 mt-4">Descubra e explore o mundo dos Pokémons</p>
+    </div>
 
-  <div class="flex-1 overflow-y-auto overflow-x-hidden">
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-      <div
-        *ngFor="let pokemon of pokemons"
-        class="flex flex-col items-center transition hover:scale-105 hover:cursor-pointer group"
-        (click)="goToDetails(pokemon)"
+    <div class="flex justify-between items-center mb-8">
+      <button (click)="prevPage()"
+              [disabled]="offset === 0"
+              class="flex items-center gap-2 px-5 py-2.5 rounded-lg
+                 bg-gradient-to-r from-blue-600 to-indigo-700
+                 text-white font-semibold shadow-md
+                 transition duration-300 ease-in-out
+                 hover:from-blue-700 hover:to-indigo-800
+                 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-500
+                 disabled:cursor-not-allowed disabled:shadow-none
+                 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1
+                 active:scale-95"
       >
-        <img
-          [src]="pokemon.image"
-          [alt]="pokemon.name"
-          class="w-24 h-24 object-contain mb-2 group-hover:drop-shadow-lg"
-          loading="lazy"
-        />
-        <div class="flex items-center justify-between w-full px-4 py-2">
-  <span class="font-semibold capitalize text-lg text-gray-800 truncate">
-    {{ pokemon.name }}
-  </span>
-          <button
-            type="button"
-            (click)="toggleFavorite(pokemon); $event.stopPropagation()"
-            class="ml-4 p-2 rounded-full transition-colors"
-            [ngClass]="isFavorite(pokemon.id) ? 'text-red-500' : 'text-gray-300 hover:text-red-400'"
-            [attr.aria-label]="isFavorite(pokemon.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
-          >
-            <svg *ngIf="isFavorite(pokemon.id)" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.343l-6.828-6.829a4 4 0 010-5.656z"/>
-            </svg>
-            <svg *ngIf="!isFavorite(pokemon.id)" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="hidden sm:inline px-5 py-2.5">Anterior</span>
+      </button>
+
+      <div class="text-sm text-gray-600 font-medium select-none">
+        {{ offset + 1 }} - {{ Math.min(offset + limit, total) }} de {{ total }}
+      </div>
+
+      <button (click)="nextPage()"
+              [disabled]="offset + limit >= total"
+              class="flex items-center gap-2 px-5 py-2.5 rounded-lg
+                 bg-gradient-to-r from-blue-600 to-indigo-700
+                 text-white font-semibold shadow-md
+                 transition duration-300 ease-in-out
+                 hover:from-blue-700 hover:to-indigo-800
+                 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-500
+                 disabled:cursor-not-allowed disabled:shadow-none
+                 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1
+                 active:scale-95"
+      >
+        <span class="hidden sm:inline px-5 py-2.5">Próximo</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 mb-8">
+      <div *ngFor="let pokemon of pokemons"
+           class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300
+           overflow-hidden group cursor-pointer
+            transform hover:-translate-y-2"
+           (click)="goToDetails(pokemon)">
+        <div class="relative bg-gradient-to-br from-blue-400 to-indigo-600 p-4 text-center">
+          <img [src]="pokemon.image"
+               [alt]="pokemon.name"
+               class="w-20 h-20 mx-auto object-contain group-hover:scale-110 transition-transform duration-300"
+               loading="lazy"/>
+          <button type="button"
+                  (click)="toggleFavorite(pokemon); $event.stopPropagation()"
+                  class="absolute top-2 right-2 p-2 hover:transition-all duration-200 group/fav"
+                  [ngClass]="isFavorite(pokemon.id) ? 'text-red-500' : 'text-gray-400 hover:text-red-400'">
+            <svg class="w-5 h-5 group-hover/fav:scale-110 transition-transform"
+                 [attr.fill]="isFavorite(pokemon.id) ? 'currentColor' : 'none'"
+                 stroke="currentColor"
+                 stroke-width="2"
                  viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M4.318 6.318a4.5 4.5 0 0 1 6.364 0L12 7.636l1.318-1.318a4.5 4.5 0 1 1 6.364 6.364L12 21.682 4.318 13.682a4.5 4.5 0 0 1 0-6.364z"/>
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12
+                     7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
             </svg>
           </button>
+          <div class="absolute top-2 left-2 bg-white/80 backdrop-blur-sm rounded-full px-2 py-1
+          text-xs font-bold text-gray-600 shadow-sm">
+            #{{ pokemon.id.toString().padStart(3, '0') }}
+          </div>
         </div>
-        <span class="text-xs text-gray-500 mt-1">#{{ pokemon.id }}</span>
+        <div class="p-4">
+          <h3 class="text-sm md:text-base font-bold text-gray-800 capitalize text-center truncate">
+            {{ pokemon.name }}
+          </h3>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="flex justify-between mt-4 flex-shrink-0">
-    <button
-      (click)="prevPage()"
-      [disabled]="offset === 0"
-      class="px-4 py-2">
-      Anterior
-    </button>
-    <button
-      (click)="nextPage()"
-      [disabled]="offset + limit >= total"
-      class="px-4 py-2">
-      Próximo
-    </button>
+    <div class="flex justify-between items-center">
+      <button (click)="prevPage()"
+              [disabled]="offset === 0"
+              class="flex items-center gap-2 px-5 py-2.5 rounded-lg
+                 bg-gradient-to-r from-blue-600 to-indigo-700
+                 text-white font-semibold shadow-md
+                 transition duration-300 ease-in-out
+                 hover:from-blue-700 hover:to-indigo-800
+                 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-500
+                 disabled:cursor-not-allowed disabled:shadow-none
+                 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1
+                 active:scale-95"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="hidden sm:inline px-5 py-2.5">Anterior</span>
+      </button>
+
+      <div class="text-sm text-gray-600 font-medium select-none">
+        {{ offset + 1 }} - {{ Math.min(offset + limit, total) }} de {{ total }}
+      </div>
+
+      <button (click)="nextPage()"
+              [disabled]="offset + limit >= total"
+              class="flex items-center gap-2 px-5 py-2.5 rounded-lg
+                 bg-gradient-to-r from-blue-600 to-indigo-700
+                 text-white font-semibold shadow-md
+                 transition duration-300 ease-in-out
+                 hover:from-blue-700 hover:to-indigo-800
+                 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-500
+                 disabled:cursor-not-allowed disabled:shadow-none
+                 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1
+                 active:scale-95"
+      >
+        <span class="hidden sm:inline px-5 py-2.5">Próximo</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+
   </div>
 </div>

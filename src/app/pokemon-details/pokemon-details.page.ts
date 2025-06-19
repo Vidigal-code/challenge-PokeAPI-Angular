@@ -93,4 +93,6 @@ export class PokemonDetailsPage implements OnInit {
   goBack() {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
+
+  protected readonly close = close;
 }

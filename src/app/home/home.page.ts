@@ -13,6 +13,7 @@ import { FavoritesService } from '../services/favorites.service';
   providers: [PokeApiService],
   //styleUrls: ['']
 })
+
 export class HomePage implements OnInit {
   pokemons: any[] = [];
   offset = 0;
@@ -67,4 +68,6 @@ export class HomePage implements OnInit {
       this.favoritesService.addFavorite(pokemon.id);
     }
   }
+
+  protected readonly Math = Math;
 }

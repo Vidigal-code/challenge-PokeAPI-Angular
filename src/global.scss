@@ -1,16 +1,23 @@
-@import "./tailwind.css";
-
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 html, body {
-  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  font-family: 'Inter', system-ui, sans-serif;
+  height: 100%;
 }
 
-ion-content {
-  --overflow: auto;
+a{
+  color: white;
 }
+
+@import "./tailwind.css";
 
 @import "@ionic/angular/css/core.css";
 @import "@ionic/angular/css/normalize.css";
@@ -25,3 +32,7 @@ ion-content {
 @import "@ionic/angular/css/flex-utils.css";
 
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+
+
+
