@@ -1,0 +1,39 @@
+<div class="max-w-3xl mx-auto p-4">
+  <h1 class="text-3xl font-bold text-center mb-6">Pokémons Favoritos</h1>
+
+  <div *ngIf="loading" class="flex justify-center items-center h-40">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+  </div>
+
+  <div *ngIf="!loading && favorites.length === 0" class="text-center text-gray-500 mt-10">
+    Nenhum Pokémon favorito encontrado.
+  </div>
+
+  <div
+    *ngIf="!loading && favorites.length > 0"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center"
+  >
+    <div
+      *ngFor="let pokemon of favorites"
+      class="flex flex-col items-center bg-white rounded-lg shadow-md p-4 group transition hover:scale-105 hover:shadow-xl cursor-pointer w-full max-w-xs"
+      (click)="goToDetails(pokemon)"
+    >
+      <img
+        [src]="pokemon.image"
+        [alt]="pokemon.name"
+        class="w-20 h-20 object-contain mb-2 group-hover:drop-shadow-lg"
+        loading="lazy"
+      />
+      <span class="font-semibold capitalize text-lg text-gray-800">{{ pokemon.name }}</span>
+      <span class="text-xs text-gray-400 mb-2">#{{ pokemon.id }}</span>
+      <button
+        type="button"
+        (click)="removeFavorite(pokemon.id); $event.stopPropagation()"
+        class="mt-2 px-3 py-1 rounded bg-red-100 text-red-600 border border-red-200 text-xs font-bold hover:bg-red-200 transition"
+        aria-label="Remover dos favoritos"
+      >
+        Remover
+      </button>
+    </div>
+  </div>
+</div>

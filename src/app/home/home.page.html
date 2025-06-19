@@ -1,20 +1,73 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="max-w-4xl mx-auto p-4 h-screen flex flex-col">
+  <h1 class="text-3xl font-bold text-center mb-6 flex-shrink-0">Pokédex</h1>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div class="flex justify-between mb-4 flex-shrink-0">
+    <button
+      (click)="prevPage()"
+      [disabled]="offset === 0"
+      class="px-4 py-2">
+      Anterior
+    </button>
+    <button
+      (click)="nextPage()"
+      [disabled]="offset + limit >= total"
+      class="px-4 py-2">
+      Próximo
+    </button>
   </div>
-</ion-content>
+
+  <div class="flex-1 overflow-y-auto overflow-x-hidden">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <div
+        *ngFor="let pokemon of pokemons"
+        class="flex flex-col items-center transition hover:scale-105 hover:cursor-pointer group"
+        (click)="goToDetails(pokemon)"
+      >
+        <img
+          [src]="pokemon.image"
+          [alt]="pokemon.name"
+          class="w-24 h-24 object-contain mb-2 group-hover:drop-shadow-lg"
+          loading="lazy"
+        />
+        <div class="flex items-center justify-between w-full px-4 py-2">
+  <span class="font-semibold capitalize text-lg text-gray-800 truncate">
+    {{ pokemon.name }}
+  </span>
+          <button
+            type="button"
+            (click)="toggleFavorite(pokemon); $event.stopPropagation()"
+            class="ml-4 p-2 rounded-full transition-colors"
+            [ngClass]="isFavorite(pokemon.id) ? 'text-red-500' : 'text-gray-300 hover:text-red-400'"
+            [attr.aria-label]="isFavorite(pokemon.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+          >
+            <svg *ngIf="isFavorite(pokemon.id)" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.343l-6.828-6.829a4 4 0 010-5.656z"/>
+            </svg>
+            <svg *ngIf="!isFavorite(pokemon.id)" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M4.318 6.318a4.5 4.5 0 0 1 6.364 0L12 7.636l1.318-1.318a4.5 4.5 0 1 1 6.364 6.364L12 21.682 4.318 13.682a4.5 4.5 0 0 1 0-6.364z"/>
+            </svg>
+          </button>
+        </div>
+        <span class="text-xs text-gray-500 mt-1">#{{ pokemon.id }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-between mt-4 flex-shrink-0">
+    <button
+      (click)="prevPage()"
+      [disabled]="offset === 0"
+      class="px-4 py-2">
+      Anterior
+    </button>
+    <button
+      (click)="nextPage()"
+      [disabled]="offset + limit >= total"
+      class="px-4 py-2">
+      Próximo
+    </button>
+  </div>
+</div>
