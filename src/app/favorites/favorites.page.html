@@ -1,72 +1,193 @@
-<div class="min-h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
   <div class="container mx-auto px-4 py-8">
 
-    <div class="text-center mb-8">
+    <div class="flex flex-col items-center justify-center text-center mb-8">
       <h1 class="text-4xl font-bold text-gray-800 mb-2">Pokémons Favoritos</h1>
-      <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 mx-auto rounded-full"></div>
+      <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full mb-4"></div>
+
+      <button (click)="clearFavorites()"
+              class="flex items-center gap-2 px-5 py-2.5 rounded-lg
+                 bg-gradient-to-r from-blue-600 to-indigo-700
+                 text-white font-semibold shadow-md
+                 transition duration-300 ease-in-out
+                 hover:from-blue-700 hover:to-indigo-800
+                 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-500
+                 disabled:cursor-not-allowed disabled:shadow-none
+                 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1
+                 active:scale-95"
+      >
+        <span class="px-5 py-2.5">Limpar todos</span>
+      </button>
     </div>
 
-    <div *ngIf="loading" class="flex justify-center items-center py-20">
+    <div class="max-w-md mx-auto mb-8">
       <div class="relative">
-        <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-200"></div>
-        <div class="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent absolute top-0 left-0"></div>
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <input type="text"
+               [(ngModel)]="searchTerm"
+               (input)="onSearchChange()"
+               placeholder="Buscar por nome ou número..."
+               class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl
+                      bg-white/80 backdrop-blur-sm shadow-sm
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                      transition-all duration-200 text-gray-700 placeholder-gray-400">
+        <div *ngIf="searchTerm"
+             class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+             (click)="clearSearch()">
+          <svg class="h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors"
+               fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </div>
       </div>
     </div>
 
-    <div *ngIf="!loading && favorites.length === 0" class="text-center py-20">
-      <div class="mb-6">
-        <svg class="w-24 h-24 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-        </svg>
-      </div>
-      <h3 class="text-xl font-semibold text-gray-600 mb-2">Nenhum Pokémon favorito</h3>
-      <p class="text-gray-500 mb-6">Adicione seus Pokémons favoritos para visualizá-los aqui!</p>
-      <a href="/" class="text-white inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600
-      text-white rounded-xl hover:from-blue-600 hover:to-indigo-700
-      font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5">
-        <svg class="text-white w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-        <p class="text-white">Explorar Pokémons</p>
-      </a>
+    <div *ngIf="searchTerm && !isLoading" class="text-center mb-4">
+      <p class="text-sm text-gray-600">
+        <span *ngIf="displayedPokemonsFavorites.length > 0">
+          {{ displayedPokemonsFavorites.length }} resultado(s) encontrado(s) para "{{ searchTerm }}"
+        </span>
+        <span *ngIf="displayedPokemonsFavorites.length === 0">
+          Nenhum Pokémon favorito foi encontrado para "{{ searchTerm }}"
+        </span>
+      </p>
     </div>
 
-    <div *ngIf="!loading && favorites.length > 0"
-         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      <div *ngFor="let pokemon of favorites"
-           class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group cursor-pointer
-           transform hover:-translate-y-2"
+    <div *ngIf="isLoading" class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 text-blue-600">
+        <svg class="animate-spin h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        <span>Buscando...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!searchTerm && paginationService.total > paginationService.limit" class="flex justify-between items-center mb-8">
+      <button (click)="prevPage()"
+              [disabled]="paginationService.offset === 0"
+              class="flex items-center gap-2 px-5 py-2.5 rounded-lg
+                 bg-gradient-to-r from-blue-600 to-indigo-700
+                 text-white font-semibold shadow-md
+                 transition duration-300 ease-in-out
+                 hover:from-blue-700 hover:to-indigo-800
+                 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-500
+                 disabled:cursor-not-allowed disabled:shadow-none
+                 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1
+                 active:scale-95"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="hidden sm:inline px-5 py-2.5">Anterior</span>
+      </button>
+
+      <div class="text-sm text-gray-600 font-medium select-none">
+        {{ paginationService.offset + 1 }} - {{ Math.min( paginationService.offset + paginationService.limit,
+        paginationService.total) }} de {{ paginationService.total }}
+      </div>
+
+      <button (click)="nextPage()"
+              [disabled]="paginationService.offset + paginationService.limit >= paginationService.total"
+              class="flex items-center gap-2 px-5 py-2.5 rounded-lg
+                 bg-gradient-to-r from-blue-600 to-indigo-700
+                 text-white font-semibold shadow-md
+                 transition duration-300 ease-in-out
+                 hover:from-blue-700 hover:to-indigo-800
+                 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-500
+                 disabled:cursor-not-allowed disabled:shadow-none
+                 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1
+                 active:scale-95"
+      >
+        <span class="hidden sm:inline px-5 py-2.5">Próximo</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 mb-8">
+      <div *ngFor="let pokemon of displayedPokemonsFavorites"
+           class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300
+           overflow-hidden group cursor-pointer
+            transform hover:-translate-y-2"
            (click)="goToDetails(pokemon)">
-
-        <div class="relative bg-gradient-to-br from-blue-400 to-indigo-600 p-6 text-center">
+        <div class="relative bg-gradient-to-br from-blue-400 to-indigo-600 p-4 text-center">
           <img [src]="pokemon.image"
                [alt]="pokemon.name"
-               class="w-24 h-24 mx-auto object-contain group-hover:scale-110 transition-transform duration-300"
+               class="w-20 h-20 mx-auto object-contain group-hover:scale-110 transition-transform duration-300"
                loading="lazy"/>
-          <div class="absolute top-3 right-3 bg-white rounded-full px-2 py-1 text-xs font-bold text-gray-600 shadow-sm">
-            #{{ pokemon.id.toString().padStart(3, '0') }}
-          </div>
-        </div>
-
-        <div class="p-4">
-          <h3 class="text-lg font-bold text-gray-800 capitalize mb-3 text-center">
-            {{ pokemon.name }}
-          </h3>
-
           <button type="button"
                   (click)="removeFavorite(pokemon.id); $event.stopPropagation()"
-                  class="w-full bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 hover:border-red-300
+                  class="w-full  hover:bg-red-100 text-red-600 border border-red-200 hover:border-red-300
                   rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 flex
                    items-center justify-center gap-2 group/btn">
             <svg class="w-4 h-4 group-hover/btn:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2
               0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
-            Remover
+            Remover do Favorito
           </button>
+          <div class="absolute top-2 left-2 bg-white/80 backdrop-blur-sm rounded-full px-2 py-1
+          text-xs font-bold text-gray-600 shadow-sm">
+            #{{ pokemon.id.toString().padStart(3, '0') }}
+          </div>
+        </div>
+        <div class="p-4">
+          <h3 class="text-sm md:text-base font-bold text-gray-800 capitalize text-center truncate">
+            {{ pokemon.name }}
+          </h3>
         </div>
       </div>
     </div>
+
+    <div *ngIf="!searchTerm && paginationService.total > paginationService.limit" class="flex justify-between items-center">
+      <button (click)="prevPage()"
+              [disabled]="paginationService.offset === 0"
+              class="flex items-center gap-2 px-5 py-2.5 rounded-lg
+                 bg-gradient-to-r from-blue-600 to-indigo-700
+                 text-white font-semibold shadow-md
+                 transition duration-300 ease-in-out
+                 hover:from-blue-700 hover:to-indigo-800
+                 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-500
+                 disabled:cursor-not-allowed disabled:shadow-none
+                 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1
+                 active:scale-95"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span class="hidden sm:inline px-5 py-2.5">Anterior</span>
+      </button>
+
+      <div class="text-sm text-gray-600 font-medium select-none">
+        {{ paginationService.offset + 1 }} - {{ Math.min(paginationService.offset +
+        paginationService.limit, paginationService.total) }} de {{ paginationService.total }}
+      </div>
+
+      <button (click)="nextPage()"
+              [disabled]="paginationService.offset + paginationService.limit >= paginationService.total"
+              class="flex items-center gap-2 px-5 py-2.5 rounded-lg
+                 bg-gradient-to-r from-blue-600 to-indigo-700
+                 text-white font-semibold shadow-md
+                 transition duration-300 ease-in-out
+                 hover:from-blue-700 hover:to-indigo-800
+                 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-500
+                 disabled:cursor-not-allowed disabled:shadow-none
+                 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1
+                 active:scale-95"
+      >
+        <span class="hidden sm:inline px-5 py-2.5">Próximo</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+    </div>
+
   </div>
 </div>

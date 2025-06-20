@@ -1,28 +1,40 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { PokeApiService } from '../services/poke-api.service';
 import { FavoritesService } from '../services/favorites.service';
 
+/**
+ * Component for displaying detailed information about a specific Pokémon.
+ * Fetches and displays Pokémon data, species information, and allows toggling favorite status.
+ */
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,
   imports: [IonicModule, CommonModule],
   templateUrl: './pokemon-details.page.html',
-  // styleUrls: ['']
 })
 export class PokemonDetailsPage implements OnInit {
-
+  /** The Pokémon data fetched from the PokeApiService. */
   pokemon: any = null;
+
+  /** The Pokémon species data fetched from the PokeApiService. */
   species: any = null;
+
+  /** Indicates whether the Pokémon data is being loaded. */
   loading = true;
 
-  private route = inject(ActivatedRoute);
+  /** Injected services. */
+  route = inject(ActivatedRoute);
   private router = inject(Router);
   private pokeApi = inject(PokeApiService);
   private favoritesService = inject(FavoritesService);
+  private toastController = inject(ToastController);
 
+  /**
+   * Lifecycle hook that initializes the component by fetching Pokémon and species data.
+   */
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -34,14 +46,14 @@ export class PokemonDetailsPage implements OnInit {
               this.species = species;
               this.loading = false;
             },
-            error: (err) => {
-              console.error('Error fetching species:', err);
+            error: async () => {
+              await this.showError('Erro ao carregar dados da espécie do Pokémon.');
               this.loading = false;
             }
           });
         },
-        error: (err) => {
-          console.error('Error fetching pokemon:', err);
+        error: async () => {
+          await this.showError('Erro ao carregar dados do Pokémon.');
           this.loading = false;
         }
       });
@@ -50,6 +62,23 @@ export class PokemonDetailsPage implements OnInit {
     }
   }
 
+  /**
+   * Displays an error message using Ionic Toast.
+   * @param message The error message to display.
+   */
+  private async showError(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      color: 'danger',
+      position: 'top'
+    });
+    await toast.present();
+  }
+
+  /**
+   * Returns an array of additional Pokémon descriptions for display.
+   */
   getAdditionalDescriptions(): { label: string; value: any }[] {
     if (!this.pokemon || !this.species) return [];
     return [
@@ -63,6 +92,9 @@ export class PokemonDetailsPage implements OnInit {
     ];
   }
 
+  /**
+   * Returns an array of Pokémon sprite image URLs.
+   */
   getImages(): string[] {
     if (!this.pokemon) return [];
     const sprites = this.pokemon.sprites;
@@ -76,10 +108,16 @@ export class PokemonDetailsPage implements OnInit {
     ].filter(Boolean);
   }
 
+  /**
+   * Checks if the current Pokémon is marked as a favorite.
+   */
   isFavorite(): boolean {
     return this.favoritesService.isFavorite(this.pokemon?.id);
   }
 
+  /**
+   * Toggles the favorite status of the current Pokémon.
+   */
   toggleFavorite() {
     if (this.pokemon) {
       if (this.isFavorite()) {
@@ -90,9 +128,13 @@ export class PokemonDetailsPage implements OnInit {
     }
   }
 
+  /**
+   * Navigates back to the parent route.
+   */
   goBack() {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
+  /** Reference to the global close function for use in the template. */
   protected readonly close = close;
 }

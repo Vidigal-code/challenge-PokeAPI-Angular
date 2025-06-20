@@ -15,6 +15,11 @@ log.txt
 package-lock.json
 pnpm-lock.yaml
 
+webhook-server/.env
+webhook-server/package-lock.json
+webhook-server/node_modules
+webhook-server/pnpm-lock.yaml
+
 .vscode
 .idea
 
