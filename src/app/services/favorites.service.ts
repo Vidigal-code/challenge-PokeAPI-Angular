@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-//import { HttpClient } from '@angular/common/http';
-//import {environment} from "../../environments/environment";
+import { HttpClient } from '@angular/common/http';
+import {environment} from "../../environments/environment";
 
 /**
  * Service for managing favorite Pokémon, stored in localStorage.
@@ -12,10 +12,10 @@ export class FavoritesService {
   private readonly storageKey = 'favoritePokemons';
 
   /** URL for sending WebHook notifications. */
-  //private readonly webhookUrl = environment.webhookUrl;
+  private readonly webhookUrl = environment.webhookUrl;
 
   /** Injected HttpClient for making HTTP requests. */
-  //private http = inject(HttpClient);
+  private http = inject(HttpClient);
 
   /**
    * Retrieves the list of favorite Pokémon IDs.
@@ -46,16 +46,13 @@ export class FavoritesService {
       localStorage.setItem(this.storageKey, JSON.stringify(favs));
 
       // Send WebHook
-
-      /*this.http.post(this.webhookUrl, {
+      this.http.post(this.webhookUrl, {
         event: 'pokemon_added',
         pokemonId,
         timestamp: new Date().toISOString()
       }).subscribe({
         error: (err) => console.error('Error sending WebHook:', err.message)
-      });*/
-
-
+      });
     }
   }
 
@@ -68,17 +65,13 @@ export class FavoritesService {
     favs = favs.filter(id => id !== pokemonId);
     localStorage.setItem(this.storageKey, JSON.stringify(favs));
 
-
-    /*this.http.post(this.webhookUrl, {
+    this.http.post(this.webhookUrl, {
       event: 'pokemon_removed',
       pokemonId,
       timestamp: new Date().toISOString()
     }).subscribe({
       error: (err) => console.error('Error sending WebHook:', err.message)
-    });*/
-
-
-
+    });
   }
 
   /**
@@ -87,13 +80,11 @@ export class FavoritesService {
   clearFavorites(): void {
     localStorage.removeItem(this.storageKey);
 
-   /* this.http.post(this.webhookUrl, {
+    this.http.post(this.webhookUrl, {
       event: 'favorites_cleared',
       timestamp: new Date().toISOString()
     }).subscribe({
       error: (err) => console.error('Error sending WebHook:', err)
-    });*/
-
-
+    });
   }
 }

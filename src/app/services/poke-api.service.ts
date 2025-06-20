@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-//import {environment} from "../../environments/environment";
+import {environment} from "../../environments/environment";
 
 /**
  * Service for interacting with the PokeAPI (https://pokeapi.co/)
@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class PokeApiService {
   /** Base URL for the PokeAPI v2 */
-  private baseUrl = "https://pokeapi.co/api/v2";
+  private baseUrl = environment.apiUrl;
 
   /** HTTP client for making API requests */
   private http = inject(HttpClient);
