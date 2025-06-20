@@ -2,8 +2,8 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: 'poke-api-angular',
-  webDir: 'www'
+  appName: 'challenge-PokeAPI-Angular',
+  webDir: 'dist'
 };
 
 export default config;
