@@ -1,5 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { RouteReuseStrategy, provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
+import { RouteReuseStrategy, provideRouter, withPreloading, PreloadAllModules, withHashLocation } from '@angular/router';
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -10,10 +10,14 @@ import { FavoritesService } from './app/services/favorites.service';
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideRouter(
+      routes,
+      withHashLocation(),
+      withPreloading(PreloadAllModules)
+    ),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideHttpClient(),
-    provideRouter(routes, withPreloading(PreloadAllModules)),
     PokeApiService,
     FavoritesService,
   ],

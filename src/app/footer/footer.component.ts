@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 /**
  * Component for displaying the application's footer.
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
+  imports: [RouterModule],
   //styleUrls: [''],
 })
 export class FooterComponent {

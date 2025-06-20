@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgClass } from "@angular/common";
+import {RouterModule} from "@angular/router";
 
 /**
  * Component for displaying a header with a toggleable menu.
@@ -9,9 +10,7 @@ import { NgClass } from "@angular/common";
   selector: 'app-header',
   templateUrl: './header.component.html',
   //styleUrls: ['./header.component.scss'],
-  imports: [
-    NgClass
-  ]
+  imports: [RouterModule, NgClass],
 })
 export class HeaderComponent {
 
