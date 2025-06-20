@@ -30,6 +30,26 @@ The GitHub repo includes **screenshots, demo GIFs**, and unit tests using **Karm
 
 ---
 
+## 📹 Demonstration Video
+
+Check out the demonstration video:
+
+- [Youtube](https://www.youtube.com/watch?v=foadnlqKipg)
+
+---
+
+### 🖼️ Layout
+
+**🔍 Versão Desktop:**
+
+![/Example-PokeAPI-Desktop](example/Example-PokeAPI-Desktop.gif)
+---
+
+**📱 Versão Mobile:**
+
+![/Example-PokeAPI-Mobile](example/Example-PokeAPI-Mobile.gif)
+---
+
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" width="150" alt="Pikachu">
