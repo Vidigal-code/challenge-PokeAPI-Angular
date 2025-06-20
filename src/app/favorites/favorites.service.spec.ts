@@ -72,7 +72,7 @@ describe('FavoritesPage', () => {
 
     expect(component.allFavorites).toEqual([]);
     expect(component.favorites).toEqual([]);
-    expect(component.paginationService.total).toBe(0);
+    expect(component.total).toBe(0);
     expect(component.loading).toBeFalse();
   }));
 
@@ -95,7 +95,7 @@ describe('FavoritesPage', () => {
       { id: 1, name: 'bulbasaur', image: 'img1.png' },
       { id: 25, name: 'pikachu', image: 'img25.png' }
     ];
-    component.paginationService.total = 2;
+    component.total = 2;
     component.favorites = component.allFavorites;
     spyOn(favoritesService, 'removeFavorite');
 
@@ -105,7 +105,7 @@ describe('FavoritesPage', () => {
     expect(favoritesService.removeFavorite).toHaveBeenCalledWith(1);
     expect(component.allFavorites).toEqual([{ id: 25, name: 'pikachu', image: 'img25.png' }]);
     expect(component.favorites).toEqual([{ id: 25, name: 'pikachu', image: 'img25.png' }]);
-    expect(component.paginationService.total).toBe(1);
+    expect(component.total).toBe(1);
   }));
 
   /**
@@ -117,8 +117,8 @@ describe('FavoritesPage', () => {
       { id: 1, name: 'bulbasaur', image: 'img1.png' },
       { id: 25, name: 'pikachu', image: 'img25.png' }
     ];
-    component.paginationService.total = 2;
-    component.paginationService.offset = 20;
+    component.total = 2;
+    component.offset = 20;
     spyOn(favoritesService, 'clearFavorites');
 
     component.clearFavorites();
@@ -127,8 +127,8 @@ describe('FavoritesPage', () => {
     expect(favoritesService.clearFavorites).toHaveBeenCalled();
     expect(component.allFavorites).toEqual([]);
     expect(component.favorites).toEqual([]);
-    expect(component.paginationService.total).toBe(0);
-    expect(component.paginationService.offset).toBe(0);
+    expect(component.total).toBe(0);
+    expect(component.offset).toBe(0);
   }));
 
   /**
@@ -138,12 +138,12 @@ describe('FavoritesPage', () => {
   it('should navigate to next page', () => {
     component.allFavorites = new Array(30).fill(null).map((_, i) =>
       ({ id: i + 1, name: `poke${i + 1}`, image: `img${i + 1}.png` }));
-    component.paginationService.total = 30;
-    component.paginationService.offset = 0;
-    component.paginationService.limit = 20;
+    component.total = 30;
+    component.offset = 0;
+    component.limit = 20;
 
     component.nextPage();
-    expect(component.paginationService.offset).toBe(20);
+    expect(component.offset).toBe(20);
     expect(component.favorites.length).toBe(10);
   });
 
@@ -154,12 +154,12 @@ describe('FavoritesPage', () => {
   it('should navigate to previous page', () => {
     component.allFavorites = new Array(30).fill(null).map((_, i) =>
       ({ id: i + 1, name: `poke${i + 1}`, image: `img${i + 1}.png` }));
-    component.paginationService.total = 30;
-    component.paginationService.offset = 20;
-    component.paginationService.limit = 20;
+    component.total = 30;
+    component.offset = 20;
+    component.limit = 20;
 
     component.prevPage();
-    expect(component.paginationService.offset).toBe(0);
+    expect(component.offset).toBe(0);
     expect(component.favorites.length).toBe(20);
   });
 });

@@ -20,6 +20,7 @@
       </button>
     </div>
 
+
     <div class="max-w-md mx-auto mb-8">
       <div class="relative">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -49,10 +50,10 @@
 
     <div *ngIf="searchTerm && !isLoading" class="text-center mb-4">
       <p class="text-sm text-gray-600">
-        <span *ngIf="displayedPokemonsFavorites.length > 0">
-          {{ displayedPokemonsFavorites.length }} resultado(s) encontrado(s) para "{{ searchTerm }}"
+        <span *ngIf="filteredPokemons.length > 0">
+          {{ filteredPokemons.length }} resultado(s) encontrado(s) para "{{ searchTerm }}"
         </span>
-        <span *ngIf="displayedPokemonsFavorites.length === 0">
+        <span *ngIf="filteredPokemons.length === 0">
           Nenhum Pokémon favorito foi encontrado para "{{ searchTerm }}"
         </span>
       </p>
@@ -68,9 +69,10 @@
       </div>
     </div>
 
-    <div *ngIf="!searchTerm && paginationService.total > paginationService.limit" class="flex justify-between items-center mb-8">
+
+    <div *ngIf="!searchTerm && total> limit" class="flex justify-between items-center mb-8">
       <button (click)="prevPage()"
-              [disabled]="paginationService.offset === 0"
+              [disabled]="offset === 0"
               class="flex items-center gap-2 px-5 py-2.5 rounded-lg
                  bg-gradient-to-r from-blue-600 to-indigo-700
                  text-white font-semibold shadow-md
@@ -88,12 +90,11 @@
       </button>
 
       <div class="text-sm text-gray-600 font-medium select-none">
-        {{ paginationService.offset + 1 }} - {{ Math.min( paginationService.offset + paginationService.limit,
-        paginationService.total) }} de {{ paginationService.total }}
+        {{ offset + 1 }} - {{ Math.min(offset + limit, total) }} de {{ total }}
       </div>
 
       <button (click)="nextPage()"
-              [disabled]="paginationService.offset + paginationService.limit >= paginationService.total"
+              [disabled]="offset + limit >= total"
               class="flex items-center gap-2 px-5 py-2.5 rounded-lg
                  bg-gradient-to-r from-blue-600 to-indigo-700
                  text-white font-semibold shadow-md
@@ -146,9 +147,9 @@
       </div>
     </div>
 
-    <div *ngIf="!searchTerm && paginationService.total > paginationService.limit" class="flex justify-between items-center">
+    <div *ngIf="!searchTerm && total > limit" class="flex justify-between items-center">
       <button (click)="prevPage()"
-              [disabled]="paginationService.offset === 0"
+              [disabled]="offset === 0"
               class="flex items-center gap-2 px-5 py-2.5 rounded-lg
                  bg-gradient-to-r from-blue-600 to-indigo-700
                  text-white font-semibold shadow-md
@@ -166,12 +167,11 @@
       </button>
 
       <div class="text-sm text-gray-600 font-medium select-none">
-        {{ paginationService.offset + 1 }} - {{ Math.min(paginationService.offset +
-        paginationService.limit, paginationService.total) }} de {{ paginationService.total }}
+        {{ offset + 1 }} - {{ Math.min(offset + limit, total) }} de {{ total }}
       </div>
 
       <button (click)="nextPage()"
-              [disabled]="paginationService.offset + paginationService.limit >= paginationService.total"
+              [disabled]="offset + limit >= total"
               class="flex items-center gap-2 px-5 py-2.5 rounded-lg
                  bg-gradient-to-r from-blue-600 to-indigo-700
                  text-white font-semibold shadow-md
