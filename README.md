@@ -30,6 +30,16 @@ The GitHub repo includes **screenshots, demo GIFs**, and unit tests using **Karm
 
 ---
 
+## 📦 Project Demonstration
+
+Check out the live demo of the project:
+
+- 🔗 [View on GitHub Pages](https://vidigal-code.github.io/challenge-PokeAPI-Angular/#/)
+
+> ℹ️ Make sure the URL includes `/#/` since the app uses hash-based routing for GitHub Pages compatibility.
+
+---
+
 ## 📹 Demonstration Video
 
 Check out the demonstration video:
