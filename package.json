@@ -10,8 +10,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "build:gh-pages": "ng build --base-href \"https://vidigal-code.github.io/challenge-PokeAPI-Angular/\" --output-path dist/challenge-PokeAPI-Angular",
-    "deploy:gh-pages": "npx angular-cli-ghpages --dir=dist/challenge-PokeAPI-Angular"
+    "build:vercel": "ng build --base-href \"/\" --output-path dist"
   },
   "private": false,
   "dependencies": {
