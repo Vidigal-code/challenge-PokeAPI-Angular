@@ -16,6 +16,11 @@ a{
   color: white;
 }
 
+form, input, optgroup, select {
+  margin: 0;
+  font: inherit;
+  color: black;
+}
 
 @import "./tailwind.css";
 
