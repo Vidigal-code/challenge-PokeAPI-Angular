@@ -12,7 +12,7 @@ export class FavoritesService {
   private readonly storageKey = 'favoritePokemons';
 
   /** URL for sending WebHook notifications. */
-  private readonly webhookUrl = environment.webhookUrl;
+  //private readonly webhookUrl = environment.webhookUrl;
 
   /** Injected HttpClient for making HTTP requests. */
   private http = inject(HttpClient);
@@ -44,7 +44,7 @@ export class FavoritesService {
     if (!favs.includes(pokemonId)) {
       favs.push(pokemonId);
       localStorage.setItem(this.storageKey, JSON.stringify(favs));
-
+/*
       // Send WebHook
       this.http.post(this.webhookUrl, {
         event: 'pokemon_added',
@@ -52,7 +52,8 @@ export class FavoritesService {
         timestamp: new Date().toISOString()
       }).subscribe({
         error: (err) => console.error('Error sending WebHook:', err.message)
-      });
+      });*/
+
     }
   }
 
@@ -65,13 +66,14 @@ export class FavoritesService {
     favs = favs.filter(id => id !== pokemonId);
     localStorage.setItem(this.storageKey, JSON.stringify(favs));
 
-    this.http.post(this.webhookUrl, {
+    /*this.http.post(this.webhookUrl, {
       event: 'pokemon_removed',
       pokemonId,
       timestamp: new Date().toISOString()
     }).subscribe({
       error: (err) => console.error('Error sending WebHook:', err.message)
-    });
+    });*/
+
   }
 
   /**
@@ -80,11 +82,13 @@ export class FavoritesService {
   clearFavorites(): void {
     localStorage.removeItem(this.storageKey);
 
-    this.http.post(this.webhookUrl, {
+    /*this.http.post(this.webhookUrl, {
       event: 'favorites_cleared',
       timestamp: new Date().toISOString()
     }).subscribe({
       error: (err) => console.error('Error sending WebHook:', err)
-    });
+    });*/
+
+
   }
 }

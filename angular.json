@@ -18,10 +18,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": {
-              "base": "dist",
-              "browser": ""
-            },
+            "outputPath": "dist",
             "index": "src/index.html",
             "polyfills": [
               "src/polyfills.ts"
@@ -36,8 +33,7 @@
               }
             ],
             "styles": ["src/global.scss", "src/theme/variables.scss"],
-            "scripts": [],
-            "browser": "src/main.ts"
+            "scripts": []
           },
           "configurations": {
             "production": {

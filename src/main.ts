@@ -22,3 +22,4 @@ bootstrapApplication(AppComponent, {
     FavoritesService,
   ],
 });
+
