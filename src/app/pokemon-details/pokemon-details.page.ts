@@ -135,6 +135,13 @@ export class PokemonDetailsPage implements OnInit {
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
+  /**
+   * Navigates back to the parent route favorites.
+   */
+  goBackFavorites() {
+    this.router.navigate(['/favorites']);
+  }
+
   /** Reference to the global close function for use in the template. */
   protected readonly close = close;
 }
